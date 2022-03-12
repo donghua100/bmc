@@ -83,7 +83,7 @@ build CMakeFiles/bmc.dir/deps/smt-switch/test_smt_switch.cpp.o: CXX_COMPILER__bm
 build bmc: CXX_EXECUTABLE_LINKER__bmc CMakeFiles/bmc.dir/deps/smt-switch/test_smt_switch.cpp.o
   FLAGS = -g
   LINK_FLAGS = -rdynamic
-  LINK_LIBRARIES = -lsmt-switch-z3
+  LINK_LIBRARIES = -lsmt-switch -lsmt-switch-z3
   OBJECT_DIR = CMakeFiles/bmc.dir
   POST_BUILD = :
   PRE_LINK = :
