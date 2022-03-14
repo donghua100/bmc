@@ -64,20 +64,20 @@ int main()
     s->set_opt("produce-unsat-assumptions","true");  // get unsat core
     // Term trans = s->make_term(true);
 
-    Sort bvs = s->make_sort(BV, 32);
-    Sort funs =
-    s->make_sort(FUNCTION, {bvs, bvs});
+    // Sort bvs = s->make_sort(BV, 32);
+    // Sort funs =
+    // s->make_sort(FUNCTION, {bvs, bvs});
 
-    Term x = s->make_symbol("xxxxxxxxxxxxx", bvs);
-    Term y = s->make_symbol("y", bvs);
-    Term f = s->make_symbol("f", funs);
+    // Term x = s->make_symbol("xxxxxxxxxxxxx", bvs);
+    // Term y = s->make_symbol("y", bvs);
+    // Term f = s->make_symbol("f", funs);
 
-    Op ext = Op(Extract, 15, 0);
-    Term x0 = s->make_term(ext, x);
-    Term y0 = s->make_term(ext, y);
+    // Op ext = Op(Extract, 15, 0);
+    // Term x0 = s->make_term(ext, x);
+    // Term y0 = s->make_term(ext, y);
 
-    Term fx = s->make_term(Apply, f, x);
-    Term fy = s->make_term(Apply, f, y);
+    // Term fx = s->make_term(Apply, f, x);
+    // Term fy = s->make_term(Apply, f, y);
 
     // cout<<fx->to_string()<<"---------"<<fx->get_sort()<<endl;
     // if (fx->is_symbolic_const())
