@@ -1,7 +1,19 @@
 [
 {
   "directory": "/home/guishuo/linux/bmc/build",
-  "command": "/usr/bin/x86_64-linux-gnu-g++-7    -g   -o CMakeFiles/bmc.dir/deps/smt-switch/test_smt_switch.cpp.o -c /home/guishuo/linux/bmc/deps/smt-switch/test_smt_switch.cpp",
-  "file": "/home/guishuo/linux/bmc/deps/smt-switch/test_smt_switch.cpp"
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I../ -I../deps  -g   -o CMakeFiles/bmc.dir/main.cpp.o -c /home/guishuo/linux/bmc/main.cpp",
+  "file": "/home/guishuo/linux/bmc/main.cpp"
+},
+
+{
+  "directory": "/home/guishuo/linux/bmc/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I../ -I../deps  -g   -o CMakeFiles/bmc.dir/frontends/btor2_encoder.cpp.o -c /home/guishuo/linux/bmc/frontends/btor2_encoder.cpp",
+  "file": "/home/guishuo/linux/bmc/frontends/btor2_encoder.cpp"
+},
+
+{
+  "directory": "/home/guishuo/linux/bmc/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I../ -I../deps  -g   -o CMakeFiles/bmc.dir/trans/ts.cpp.o -c /home/guishuo/linux/bmc/trans/ts.cpp",
+  "file": "/home/guishuo/linux/bmc/trans/ts.cpp"
 }
 ]

@@ -67,11 +67,24 @@ build package: phony CMakeFiles/package.util
 # Order-only phony target for bmc
 
 build cmake_object_order_depends_target_bmc: phony
-build CMakeFiles/bmc.dir/deps/smt-switch/test_smt_switch.cpp.o: CXX_COMPILER__bmc ../deps/smt-switch/test_smt_switch.cpp || cmake_object_order_depends_target_bmc
-  DEP_FILE = CMakeFiles/bmc.dir/deps/smt-switch/test_smt_switch.cpp.o.d
+build CMakeFiles/bmc.dir/main.cpp.o: CXX_COMPILER__bmc ../main.cpp || cmake_object_order_depends_target_bmc
+  DEP_FILE = CMakeFiles/bmc.dir/main.cpp.o.d
   FLAGS = -g
+  INCLUDES = -I../ -I../deps
   OBJECT_DIR = CMakeFiles/bmc.dir
-  OBJECT_FILE_DIR = CMakeFiles/bmc.dir/deps/smt-switch
+  OBJECT_FILE_DIR = CMakeFiles/bmc.dir
+build CMakeFiles/bmc.dir/frontends/btor2_encoder.cpp.o: CXX_COMPILER__bmc ../frontends/btor2_encoder.cpp || cmake_object_order_depends_target_bmc
+  DEP_FILE = CMakeFiles/bmc.dir/frontends/btor2_encoder.cpp.o.d
+  FLAGS = -g
+  INCLUDES = -I../ -I../deps
+  OBJECT_DIR = CMakeFiles/bmc.dir
+  OBJECT_FILE_DIR = CMakeFiles/bmc.dir/frontends
+build CMakeFiles/bmc.dir/trans/ts.cpp.o: CXX_COMPILER__bmc ../trans/ts.cpp || cmake_object_order_depends_target_bmc
+  DEP_FILE = CMakeFiles/bmc.dir/trans/ts.cpp.o.d
+  FLAGS = -g
+  INCLUDES = -I../ -I../deps
+  OBJECT_DIR = CMakeFiles/bmc.dir
+  OBJECT_FILE_DIR = CMakeFiles/bmc.dir/trans
 
 # =============================================================================
 # Link build statements for EXECUTABLE target bmc
@@ -80,10 +93,11 @@ build CMakeFiles/bmc.dir/deps/smt-switch/test_smt_switch.cpp.o: CXX_COMPILER__bm
 #############################################
 # Link the executable bmc
 
-build bmc: CXX_EXECUTABLE_LINKER__bmc CMakeFiles/bmc.dir/deps/smt-switch/test_smt_switch.cpp.o
+build bmc: CXX_EXECUTABLE_LINKER__bmc CMakeFiles/bmc.dir/main.cpp.o CMakeFiles/bmc.dir/frontends/btor2_encoder.cpp.o CMakeFiles/bmc.dir/trans/ts.cpp.o
   FLAGS = -g
   LINK_FLAGS = -rdynamic
-  LINK_LIBRARIES = -lsmt-switch -lsmt-switch-z3
+  LINK_LIBRARIES = -Wl,-rpath,/home/guishuo/linux/bmc/deps/btor2parser -lsmt-switch -lsmt-switch-z3 -lbtor2parser
+  LINK_PATH = -L/home/guishuo/linux/bmc/deps/btor2parser
   OBJECT_DIR = CMakeFiles/bmc.dir
   POST_BUILD = :
   PRE_LINK = :
