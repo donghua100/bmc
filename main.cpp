@@ -20,8 +20,9 @@ void print_all_term(Term term)
             cout<<"this is a symbolic_const: ";
         }
         string ss = t->to_string();
-        if (ss.length() < 10 ) cout<<ss<<endl;
-        else cout << "term[0:10] = "<<ss.substr(10)<<endl;
+        cout<<ss<<endl;
+        // if (ss.length() < 10 ) cout<<ss<<endl;
+        // else cout << "term[0:10] = "<<ss.substr(10)<<endl;
         for (const auto &c:t) to_visit.push_back(c);
     }
 }
@@ -29,7 +30,7 @@ void print_all_term(Term term)
 int main()
 {
 
-    string filename = "../tests/encoder/input/btor2/counter.btor2";
+    string filename = "../tests/encoder/input/btor2/p-mycounter.btor2";
     SmtSolver s = smt::Z3SolverFactory::create(false);
     s->set_opt("incremental", "true");    
     s->set_opt("produce-models", "true");  // get value
@@ -39,5 +40,11 @@ int main()
     BTOR2Encoder be(filename, ts);
     // cout<<ts.trans_->to_string()<<endl;
     print_all_term(ts.trans_);
+
+    cout<<"-------------------\n"<<"property :"<<endl;
+    for (const auto & t:be.propvec())
+    {
+        cout<<t->to_string()<<endl;
+    }
     return 0;
 }
