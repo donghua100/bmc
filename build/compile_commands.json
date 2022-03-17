@@ -15,5 +15,11 @@
   "directory": "/home/guishuo/linux/bmc/build",
   "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I../ -I../deps  -g   -o CMakeFiles/bmc.dir/trans/ts.cpp.o -c /home/guishuo/linux/bmc/trans/ts.cpp",
   "file": "/home/guishuo/linux/bmc/trans/ts.cpp"
+},
+
+{
+  "directory": "/home/guishuo/linux/bmc/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I../ -I../deps  -g   -o CMakeFiles/bmc.dir/trans/unroller.cpp.o -c /home/guishuo/linux/bmc/trans/unroller.cpp",
+  "file": "/home/guishuo/linux/bmc/trans/unroller.cpp"
 }
 ]

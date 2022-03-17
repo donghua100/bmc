@@ -51,5 +51,13 @@ class TransitionSystem{
     typedef std::vector<const smt::UnorderedTermSet *> UnorderedTermSetPtrVec;
     bool contains(const smt::Term & term, UnorderedTermSetPtrVec term_sets) const;
     const smt::SmtSolver & solver() const { return solver_; };
+    
+    friend void swap(TransitionSystem & ts1, TransitionSystem & ts2);
+    TransitionSystem & operator=(TransitionSystem other);
+
+    const smt::UnorderedTermSet & statevars() const { return statevars_; };
+    const smt::UnorderedTermSet & inputvars() const { return inputvars_; }
+
+    smt::Term next(const smt::Term & term) const;
 
 };

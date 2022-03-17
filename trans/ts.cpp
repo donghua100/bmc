@@ -5,6 +5,29 @@
 using namespace smt;
 using namespace std;
 
+
+void swap(TransitionSystem & ts1, TransitionSystem & ts2)
+{
+  std::swap(ts1.solver_, ts2.solver_);
+  std::swap(ts1.init_, ts2.init_);
+  std::swap(ts1.trans_, ts2.trans_);
+  std::swap(ts1.statevars_, ts2.statevars_);
+  std::swap(ts1.next_statevars_, ts2.next_statevars_);
+  std::swap(ts1.inputvars_, ts2.inputvars_);
+  std::swap(ts1.named_terms_, ts2.named_terms_);
+  std::swap(ts1.term_to_name_, ts2.term_to_name_);
+  std::swap(ts1.state_updates_, ts2.state_updates_);
+  std::swap(ts1.next_map_, ts2.next_map_);
+  std::swap(ts1.curr_map_, ts2.curr_map_);
+  std::swap(ts1.constraints_, ts2.constraints_);
+}
+
+TransitionSystem & TransitionSystem::operator=(TransitionSystem other)
+{
+  swap(*this, other);
+  return *this;
+}
+
 void TransitionSystem::name_term(const std::string name, const smt::Term & t)
 {
   auto it = named_terms_.find(name);
@@ -201,4 +224,12 @@ void TransitionSystem::add_constraint(const Term & constraint,
   } else {
     throw PanguException("Constraint cannot have next states");
   }
+}
+
+Term TransitionSystem::next(const Term & term) const
+{
+  if (next_map_.find(term) != next_map_.end()) {
+    return next_map_.at(term);
+  }
+  return solver_->substitute(term, next_map_);
 }

@@ -1,7 +1,8 @@
 #include<smt-switch/smt.h>
 #include<smt-switch/z3_factory.h>
-#include"trans/ts.h"
 #include"frontends/btor2_encoder.h"
+#include"trans/ts.h"
+#include"trans/unroller.h"
 
 
 using namespace std;
@@ -30,12 +31,12 @@ void print_all_term(Term term)
 int main()
 {
 
-    string filename = "../tests/encoder/input/btor2/p-mycounter.btor2";
+    string filename = "../tests/encoder/input/btor2/p-counter-false.btor2";
     SmtSolver s = smt::Z3SolverFactory::create(false);
     s->set_opt("incremental", "true");    
     s->set_opt("produce-models", "true");  // get value
     s->set_opt("produce-unsat-assumptions","true");  // get unsat core
-    cout<<"start..."<<endl;
+    cout<<"start encoder..."<<endl;
     TransitionSystem ts(s);
     BTOR2Encoder be(filename, ts);
     // cout<<ts.trans_->to_string()<<endl;
@@ -45,6 +46,16 @@ int main()
     for (const auto & t:be.propvec())
     {
         cout<<t->to_string()<<endl;
+    }
+    cout<<"end encoder..."<<endl;
+    cout<<"start encoder.."<<endl;
+    Unroller u(ts);
+    UnorderedTermSet states = ts.statevars();
+    for (const auto &s:states)
+    {
+        cout <<"state : "<<s->to_string()<<endl;
+        cout <<"next state :"<<ts.next(s)->to_string()<<endl;
+        cout <<"state at time 1 :"<<u.at_time(s,1)->to_string()<<endl;
     }
     return 0;
 }
