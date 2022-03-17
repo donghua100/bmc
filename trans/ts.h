@@ -56,7 +56,9 @@ class TransitionSystem{
     TransitionSystem & operator=(TransitionSystem other);
 
     const smt::UnorderedTermSet & statevars() const { return statevars_; };
-    const smt::UnorderedTermSet & inputvars() const { return inputvars_; }
+    const smt::UnorderedTermSet & inputvars() const { return inputvars_; };
+    smt::Term init() const { return init_; };
+    smt::Term trans() const { return trans_; };
 
     smt::Term next(const smt::Term & term) const;
 

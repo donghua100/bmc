@@ -3,6 +3,7 @@
 #include"frontends/btor2_encoder.h"
 #include"trans/ts.h"
 #include"trans/unroller.h"
+#include"bmc/bmc.h"
 
 
 using namespace std;
@@ -47,15 +48,27 @@ int main()
     {
         cout<<t->to_string()<<endl;
     }
-    cout<<"end encoder..."<<endl;
-    cout<<"start encoder.."<<endl;
-    Unroller u(ts);
-    UnorderedTermSet states = ts.statevars();
-    for (const auto &s:states)
+    // cout<<"end encoder..."<<endl;
+    // cout<<"start encoder.."<<endl;
+    // Unroller u(ts);
+    // UnorderedTermSet states = ts.statevars();
+    // for (const auto &s:states)
+    // {
+    //     cout <<"state : "<<s->to_string()<<endl;
+    //     cout <<"next state :"<<ts.next(s)->to_string()<<endl;
+    //     cout <<"state at time 1 :"<<u.at_time(s,1)->to_string()<<endl;
+    // }
+    // TermVec prop = be.propvec();
+    // for (const auto &b : prop)
+    // {
+    //     cout <<"prop state : "<<b->to_string()<<endl;
+    // }
+    Property p(s,be.propvec()[0]);
+    Bmc bmc(p,ts,s);
+    ProverResult r = bmc.check_until(10);
+    if (r == FALSE)
     {
-        cout <<"state : "<<s->to_string()<<endl;
-        cout <<"next state :"<<ts.next(s)->to_string()<<endl;
-        cout <<"state at time 1 :"<<u.at_time(s,1)->to_string()<<endl;
+        cout<<"find counter-example!!!"<<endl;
     }
     return 0;
 }

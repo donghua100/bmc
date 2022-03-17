@@ -91,6 +91,12 @@ build CMakeFiles/bmc.dir/trans/unroller.cpp.o: CXX_COMPILER__bmc ../trans/unroll
   INCLUDES = -I../ -I../deps
   OBJECT_DIR = CMakeFiles/bmc.dir
   OBJECT_FILE_DIR = CMakeFiles/bmc.dir/trans
+build CMakeFiles/bmc.dir/bmc/bmc.cpp.o: CXX_COMPILER__bmc ../bmc/bmc.cpp || cmake_object_order_depends_target_bmc
+  DEP_FILE = CMakeFiles/bmc.dir/bmc/bmc.cpp.o.d
+  FLAGS = -g
+  INCLUDES = -I../ -I../deps
+  OBJECT_DIR = CMakeFiles/bmc.dir
+  OBJECT_FILE_DIR = CMakeFiles/bmc.dir/bmc
 
 # =============================================================================
 # Link build statements for EXECUTABLE target bmc
@@ -99,7 +105,7 @@ build CMakeFiles/bmc.dir/trans/unroller.cpp.o: CXX_COMPILER__bmc ../trans/unroll
 #############################################
 # Link the executable bmc
 
-build bmc: CXX_EXECUTABLE_LINKER__bmc CMakeFiles/bmc.dir/main.cpp.o CMakeFiles/bmc.dir/frontends/btor2_encoder.cpp.o CMakeFiles/bmc.dir/trans/ts.cpp.o CMakeFiles/bmc.dir/trans/unroller.cpp.o
+build bmc: CXX_EXECUTABLE_LINKER__bmc CMakeFiles/bmc.dir/main.cpp.o CMakeFiles/bmc.dir/frontends/btor2_encoder.cpp.o CMakeFiles/bmc.dir/trans/ts.cpp.o CMakeFiles/bmc.dir/trans/unroller.cpp.o CMakeFiles/bmc.dir/bmc/bmc.cpp.o
   FLAGS = -g
   LINK_FLAGS = -rdynamic
   LINK_LIBRARIES = -Wl,-rpath,/home/guishuo/linux/bmc/deps/btor2parser -lsmt-switch -lsmt-switch-z3 -lbtor2parser

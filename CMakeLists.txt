@@ -17,7 +17,8 @@ link_directories(${PROJECT_SOURCE_DIR}/deps/btor2parser)
 add_executable(bmc main.cpp
                     frontends/btor2_encoder.cpp
                     trans/ts.cpp
-                    trans/unroller.cpp)
+                    trans/unroller.cpp
+                    bmc/bmc.cpp)
 
 target_link_libraries(bmc  libsmt-switch.so libsmt-switch-z3.so libbtor2parser.so) 
 
