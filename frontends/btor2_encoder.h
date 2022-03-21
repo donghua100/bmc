@@ -28,7 +28,6 @@ extern "C" {
 #include <unordered_map>
 #include "assert.h"
 
-#pragma once
 #include "trans/ts.h"
 #include "utils/exceptions.h"
 

@@ -20,7 +20,7 @@ add_executable(bmc main.cpp
                     trans/unroller.cpp
                     bmc/bmc.cpp)
 
-target_link_libraries(bmc  libsmt-switch.so libsmt-switch-z3.so libbtor2parser.so) 
+target_link_libraries(bmc  libsmt-switch.so libsmt-switch-cvc5.so libbtor2parser.so) 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
