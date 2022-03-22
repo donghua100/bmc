@@ -61,5 +61,9 @@ class TransitionSystem{
     smt::Term trans() const { return trans_; };
 
     smt::Term next(const smt::Term & term) const;
+    const std::unordered_map<std::string, smt::Term> & named_terms() const
+    {
+      return named_terms_;
+    };
 
 };

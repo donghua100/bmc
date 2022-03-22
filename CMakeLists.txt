@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 3.0.0)
+
+set(CMAKE_C_COMPILER "g++")
+set(CMAKE_CXX_COMPILER "g++")
+
 project(bmc VERSION 0.1.0)
 
 include(CTest)
@@ -20,7 +24,8 @@ add_executable(bmc main.cpp
                     trans/unroller.cpp
                     bmc/bmc.cpp)
 
-target_link_libraries(bmc  libsmt-switch.so libsmt-switch-cvc5.so libbtor2parser.so) 
+target_link_libraries(bmc  libsmt-switch.so libsmt-switch-cvc5.so libbtor2parser.so 
+                -lgmp -lgmpxx) 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

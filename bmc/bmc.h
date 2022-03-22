@@ -45,9 +45,12 @@ class Bmc{
   ~Bmc();
   ProverResult check_until(int k);
   void initialize();
+  std::vector<smt::UnorderedTermMap> witness_;
+  const std::vector<smt::UnorderedTermMap> witness(){return witness_;}
 
  protected:
   bool step(int i);
+  bool compute_witness();
   smt::SmtSolver solver_;
 
   TransitionSystem ts_;

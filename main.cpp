@@ -4,6 +4,7 @@
 #include"trans/ts.h"
 #include"trans/unroller.h"
 #include"bmc/bmc.h"
+#include"printer/btor2_witness._printer.h"
 #include<vector>
 #include<string>
 #include<cstring>
@@ -50,7 +51,8 @@ int main()
 
     // string testfile = "../tests/encoder/input/btor2/array/2019/mann/unsafe/ridecore_array_unsafe.btor";
     // string testfile = "../tests/encoder/input/mybtor2/ridecore.btor";
-    string testfile = "../tests/encoder/input/mybtor2/m-mycounter.btor2";
+    // string testfile = "../tests/encoder/input/mybtor2/m-mycounter.btor2";
+    string testfile = "../tests/encoder/input/btor2/bv/2019/beem/anderson.3.prop1-back-serstep.btor2";
     try
     {
         TransitionSystem ts(s);
@@ -63,7 +65,11 @@ int main()
         ProverResult r = bmc.check_until(200);
         if (r == ProverResult::FALSE)
         {
-            cout<<"find counter-example!!!"<<endl;
+            cout << "sat" << endl;
+            cout << "b" <<0<< endl;
+            // cout<<"find counter-example!!!"<<endl;
+            vector<smt::UnorderedTermMap> cex = bmc.witness();
+            print_witness_btor(be, cex, ts);
         }
         else if (r == ProverResult::UNKNOWN)
         {

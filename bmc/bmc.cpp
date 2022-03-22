@@ -40,7 +40,7 @@ ProverResult Bmc::check_until(int k)
 
   for (int i = reached_k_ + 1; i <= k; ++i) {
     if (!step(i)) {
-      // compute_witness();
+      compute_witness();
       return ProverResult::FALSE;
     }
   }
@@ -70,5 +70,34 @@ bool Bmc::step(int i)
   }
 
   return res;
+}
+
+bool Bmc::compute_witness()
+{
+  // TODO: make sure the solver state is SAT
+
+  for (int i = 0; i <= reached_k_ + 1; ++i) {
+    witness_.push_back(UnorderedTermMap());
+    UnorderedTermMap & map = witness_.back();
+
+    for (const auto &v : ts_.statevars()) {
+      const Term &vi = unroller_.at_time(v, i);
+      const Term &r = solver_->get_value(vi);
+      map[v] = r;
+    }
+
+    for (const auto &v : ts_.inputvars()) {
+      const Term &vi = unroller_.at_time(v, i);
+      const Term &r = solver_->get_value(vi);
+      map[v] = r;
+    }
+
+    for (const auto &elem : ts_.named_terms()) {
+      const Term &ti = unroller_.at_time(elem.second, i);
+      map[elem.second] = solver_->get_value(ti);
+    }
+  }
+
+  return true;
 }
 
