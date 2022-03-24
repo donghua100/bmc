@@ -11,7 +11,8 @@ Bmc::Bmc(const Property & p, const TransitionSystem & ts,
          unroller_(ts_),
          bad_(solver_->make_term(smt::PrimOp::Not,
                 p.prop())),
-         initialized_ (false)
+         initialized_ (false),
+         inv(false)
 {
 }
 
@@ -30,7 +31,8 @@ void Bmc::initialize()
   }
 
   initialized_ = true;
-
+  if (inv) solver_->assert_formula(unroller_.at_time(bad_,0));
+  else
   solver_->assert_formula(unroller_.at_time(ts_.init(), 0));
 }
 
@@ -60,6 +62,8 @@ bool Bmc::step(int i)
 
   solver_->push();
   std::cout<< "Checking bmc at bound: "<<i<<std::endl;
+  if (inv) solver_->assert_formula(unroller_.at_time(ts_.init(),i));
+  else
   solver_->assert_formula(unroller_.at_time(bad_, i));
   Result r = solver_->check_sat();
   if (r.is_sat()) {

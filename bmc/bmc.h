@@ -34,7 +34,6 @@ class Property
   smt::Term prop_;
 
   std::string name_; 
-
 };  
 
 class Bmc{
@@ -44,6 +43,7 @@ class Bmc{
 
   ~Bmc();
   ProverResult check_until(int k);
+  void set_inv(){inv = true;}
   void initialize();
   std::vector<smt::UnorderedTermMap> witness_;
   const std::vector<smt::UnorderedTermMap> witness(){return witness_;}
@@ -61,5 +61,6 @@ class Bmc{
 
   smt::Term bad_;
   bool initialized_;
+  bool inv;
 
 };
