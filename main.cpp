@@ -115,13 +115,14 @@ int main(int argc,char *argv[])
     // string testfile = "../tests/encoder/input/btor2/bv/2019/beem/anderson.3.prop1-back-serstep.btor2";
     int k = 0;
     string testfile;
-    if(argc != 3) 
+    if(argc != 4) 
     {
-        printf("usage: bmc ksteps filename\n");
+        printf("usage: bmc ksteps filename inv(true or false)\n");
         return 0;
     }
     k = stoi(argv[1]);
     testfile = argv[2];
+    string inv = argv[3];
     try
     {
         TransitionSystem ts(s);
@@ -131,7 +132,7 @@ int main(int argc,char *argv[])
         Property p(s,propvec[0]);
         cout << "start bmc.."<<endl;
         Bmc bmc(p,ts,s);
-        // bmc.set_inv();
+        if (inv == "true") bmc.set_inv();
         ProverResult r = bmc.check_until(k);
         if (r == ProverResult::FALSE)
         {
