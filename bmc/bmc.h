@@ -39,11 +39,11 @@ class Property
 class Bmc{
     public:
   Bmc(const Property & p, const TransitionSystem & ts,
-      const smt::SmtSolver & solver);
+      const smt::SmtSolver & solver,bool inv = false);
 
   ~Bmc();
   ProverResult check_until(int k);
-  void set_inv(){inv = true;}
+  void set_inv(){inv_ = true;}
   void initialize();
   std::vector<smt::UnorderedTermMap> witness_;
   const std::vector<smt::UnorderedTermMap> witness(){return witness_;}
@@ -61,6 +61,6 @@ class Bmc{
 
   smt::Term bad_;
   bool initialized_;
-  bool inv;
+  bool inv_;
 
 };
