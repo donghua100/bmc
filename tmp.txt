@@ -1,0 +1,21 @@
+file name: /home/guishuo/linux/bmc/tests/encoder/input/mybtor2/m-mycounter.btor2
+start bmc..
+Checking bmc at bound: 0
+Checking bmc at bound: 1
+Checking bmc at bound: 2
+Checking bmc at bound: 3
+sat
+b0
+#0
+0 000 cnt@0
+1 0 state8@0
+2 0 state10@0
+@0
+0 0 clk@0
+@1
+0 0 clk@1
+@2
+0 0 clk@2
+@3
+0 0 clk@3
+.

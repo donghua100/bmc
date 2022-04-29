@@ -1,0 +1,10 @@
+read -formal counter-false-10.v;
+prep -top counter;
+hierarchy -check;
+chformal -assume -early;
+
+memory -nomap;
+flatten;
+setundef -undriven -expose;
+
+write_btor ../tests/encoder/input/mybtor2/p-counter-false-10.btor2

@@ -1,0 +1,27 @@
+[
+{
+  "directory": "/home/guishuo/linux/bmc",
+  "command": "/usr/bin/g++   -I/home/guishuo/linux/bmc -I/home/guishuo/linux/bmc/deps    -o CMakeFiles/bmc.dir/main.cpp.o -c /home/guishuo/linux/bmc/main.cpp",
+  "file": "/home/guishuo/linux/bmc/main.cpp"
+},
+{
+  "directory": "/home/guishuo/linux/bmc",
+  "command": "/usr/bin/g++   -I/home/guishuo/linux/bmc -I/home/guishuo/linux/bmc/deps    -o CMakeFiles/bmc.dir/frontends/btor2_encoder.cpp.o -c /home/guishuo/linux/bmc/frontends/btor2_encoder.cpp",
+  "file": "/home/guishuo/linux/bmc/frontends/btor2_encoder.cpp"
+},
+{
+  "directory": "/home/guishuo/linux/bmc",
+  "command": "/usr/bin/g++   -I/home/guishuo/linux/bmc -I/home/guishuo/linux/bmc/deps    -o CMakeFiles/bmc.dir/trans/ts.cpp.o -c /home/guishuo/linux/bmc/trans/ts.cpp",
+  "file": "/home/guishuo/linux/bmc/trans/ts.cpp"
+},
+{
+  "directory": "/home/guishuo/linux/bmc",
+  "command": "/usr/bin/g++   -I/home/guishuo/linux/bmc -I/home/guishuo/linux/bmc/deps    -o CMakeFiles/bmc.dir/trans/unroller.cpp.o -c /home/guishuo/linux/bmc/trans/unroller.cpp",
+  "file": "/home/guishuo/linux/bmc/trans/unroller.cpp"
+},
+{
+  "directory": "/home/guishuo/linux/bmc",
+  "command": "/usr/bin/g++   -I/home/guishuo/linux/bmc -I/home/guishuo/linux/bmc/deps    -o CMakeFiles/bmc.dir/bmc/bmc.cpp.o -c /home/guishuo/linux/bmc/bmc/bmc.cpp",
+  "file": "/home/guishuo/linux/bmc/bmc/bmc.cpp"
+}
+]

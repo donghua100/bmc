@@ -26,14 +26,22 @@ void Bmc::initialize()
 
   reached_k_ = -1;
 
-  if (!ts_.only_curr(bad_)) {
-    throw PanguException("Property should not contain inputs or next state variables");
-  }
+  // if (!ts_.only_curr(bad_)) {
+  //   throw PanguException("Property should not contain inputs or next state variables");
+  // }
 
   initialized_ = true;
   if (inv_) solver_->assert_formula(unroller_.at_time(bad_,0));
   else
   solver_->assert_formula(unroller_.at_time(ts_.init(), 0));
+  // std::cout<<"init: "<<ts_.init()<<'\n';
+  // std::cout<<"bad: "<<bad_<<'\n';
+  // std::cout<<"init@0: "<<unroller_.at_time(ts_.init(),0)<<'\n';
+  // std::cout<<"bad@0: "<<unroller_.at_time(bad_,0)<<'\n';
+  // std::cout<<"init@1: "<<unroller_.at_time(ts_.init(),1)<<'\n';
+  // std::cout<<"bad@1: "<<unroller_.at_time(bad_,1)<<'\n';
+  // std::cout<<"trans: "<<ts_.trans()<<'\n';
+  // std::cout<<"trans@0: "<<unroller_.at_time(ts_.trans(),0)<<'\n';
 }
 
 ProverResult Bmc::check_until(int k)

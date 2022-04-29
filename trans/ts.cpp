@@ -198,10 +198,11 @@ void TransitionSystem::promote_inputvar(const Term & iv)
 void TransitionSystem::constrain_init(const Term & constraint)
 {
   // TODO: Only do this check in debug mode
-  if (!only_curr(constraint)) {
-    throw PanguException(
-        "Initial state constraints should only use current state variables");
-  }
+  
+  // if (!only_curr(constraint)) {
+  //   throw PanguException(
+  //       "Initial state constraints should only use current state variables");
+  // }
   init_ = solver_->make_term(And, init_, constraint);
 }
 

@@ -1,5 +1,6 @@
 #include<smt-switch/smt.h>
 #include<smt-switch/cvc5_factory.h>
+#include<smt-switch/boolector_factory.h>
 #include"frontends/btor2_encoder.h"
 #include"trans/ts.h"
 #include"trans/unroller.h"
@@ -10,9 +11,11 @@
 #include<cstring>
 #include<dirent.h>
 
-
 using namespace std;
 using namespace smt;
+
+
+// -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 void getFileNames(string path,vector<string> &filesvec)
 {
@@ -39,10 +42,11 @@ void getFileNames(string path,vector<string> &filesvec)
 
 
 
-void test_one_file(string file,bool inv = false)
+void test_one_file(string file,int k,bool inv = false)
 {
     cout<<"file name: "<<file<<endl;
-    SmtSolver s = smt::Cvc5SolverFactory::create(false);
+	cout<<"1111";
+    SmtSolver s = smt::BoolectorSolverFactory::create(false);
     s->set_opt("incremental", "true");    
     s->set_opt("produce-models", "true");  // get value
     s->set_opt("produce-unsat-assumptions","true"); 
@@ -55,7 +59,7 @@ void test_one_file(string file,bool inv = false)
         Property p(s,propvec[0]);
         cout << "start bmc.."<<endl;
         Bmc bmc(p,ts,s,inv);
-        ProverResult r = bmc.check_until(200);
+        ProverResult r = bmc.check_until(k);
         if (r == ProverResult::FALSE)
         {
             cout << "sat" << endl;
@@ -66,7 +70,7 @@ void test_one_file(string file,bool inv = false)
         }
         else if (r == ProverResult::UNKNOWN)
         {
-            cout << "the circuit in safe in "<<300<<"steps"<<endl;
+            cout << "the circuit in safe in "<<k<<"steps"<<endl;
         }
         else if (r == ProverResult::ERROR)
         {
@@ -90,25 +94,36 @@ void test_all_file(string filepath)
     cout<<"tot files : "<<filevec.size()<<endl;
     for (const auto & file:filevec) 
     {
-        test_one_file(file);
+        test_one_file(file,100,false);
         cout<<"-------------------------"<<endl;
     }
 }
 
-int main()
+int main(int argc,char *argv[])
 {
-    string filepath = "../tests/encoder/input/btor2/array";
-    string file = "../tests/encoder/input/btor2/array/2019/wolf/2019B/marlann_compute_fail2-p1.btor"; // 12 vs 90+
-    string file1 = "../tests/encoder/input/btor2/bv/2020/mann/rast-p19.btor";  // 0 vs 0
-    string file2 = "../tests/encoder/input/btor2/bv/2019/beem/anderson.3.prop1-back-serstep.btor2";// 3 vs 112+
-    string file3 = "../tests/encoder/input/mybtor2/memory.btor2"; // 3 vs 100+
-    string file4 = "../tests/encoder/input/mybtor2/p-counter-false.btor2"; // 2 vs 1
-    string file5 = "../tests/encoder/input/btor2/array/2019/wolf/2019C/dblclockfft_butterfly_ck1-p006.btor";//UNSAT 10+ vs30+
-    string file6 = "../tests/encoder/input/btor2/array/2019/mann/unsafe/ridecore_array_unsafe.btor";
-    string file7 = "../tests/encoder/input/btor2/bv/2019/beem/krebs.3.prop1-func-interl.btor2";
-    
-    test_one_file(file7,false);
+    // string filepath = "../tests/encoder/input/btor2/array";
+    // string file = "../tests/encoder/input/btor2/array/2019/wolf/2019B/marlann_compute_fail2-p1.btor"; // 12 vs 90+
+    // string file1 = "../tests/encoder/input/btor2/bv/2020/mann/rast-p19.btor";  // 0 vs 0
+    // string file2 = "../tests/encoder/input/btor2/bv/2019/beem/anderson.3.prop1-back-serstep.btor2";// 3 vs 112+
+    // string file3 = "../tests/encoder/input/mybtor2/memory.btor2"; // 3 vs 100+
+    // string file4 = "../tests/encoder/input/mybtor2/p-counter-false.btor2"; // 2 vs 1
+    // string file5 = "../tests/encoder/input/btor2/array/2019/wolf/2019C/dblclockfft_butterfly_ck1-p006.btor";//UNSAT 10+ vs30+
+    // string file6 = "../tests/encoder/input/btor2/array/2019/mann/unsafe/ridecore_array_unsafe.btor";
+    // string file7 = "../tests/encoder/input/mybtor2/p-counter-false-10.btor2"; // 90 vs 2
 
+
+    if (argc != 4)
+    {
+        printf("usesage:bmc ksteps filename inv(0 or 1)\n");
+        exit(-1);
+    }
+    
+    int k = stoi(argv[1]);
+    string file = argv[2];
+    string inv = argv[3];
+    bool flag = false;
+    if(inv == "1") flag = true;
+    test_one_file(file,k,flag);
 }
 
 
