@@ -183,6 +183,10 @@ bool TransitionSystem::is_input_var(const Term & sv) const
   return (inputvars_.find(sv) != inputvars_.end());
 }
 
+bool TransitionSystem::is_next_var(const smt::Term &sv) const{
+	return next_statevars_.find(sv) != next_statevars_.end();
+}
+
 void TransitionSystem::promote_inputvar(const Term & iv)
 {
   size_t num_erased = inputvars_.erase(iv);

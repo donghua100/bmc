@@ -38,6 +38,7 @@ class TransitionSystem{
     void assign_next(const smt::Term & state, const smt::Term & val);
 
     bool is_input_var(const smt::Term & t) const;
+	bool is_next_var(const smt::Term & sv) const;
 
     void promote_inputvar(const smt::Term & iv);
     void add_constraint(const smt::Term & constraint,

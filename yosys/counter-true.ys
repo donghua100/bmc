@@ -1,0 +1,7 @@
+read_verilog -formal mycounter-true.v
+prep -top mycounter
+flatten
+memory -nomap
+hierarchy -check
+setundef -undriven -init -expose
+write_btor  -s ../tests/encoder/input/mybtor2/mycounter-true.btor2

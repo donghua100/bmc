@@ -1,0 +1,18 @@
+$date
+Monday 2022/05/09  14:40:49
+$end
+$version PONO $end
+$timescale 1 ns $end
+$var reg 3 v0 cnt[2:0] $end
+$var wire 1 v1 clk $end
+$enddefinitions $end
+#0
+b000 v0
+b0 v1
+#1
+b001 v0
+#2
+b010 v0
+#3
+b011 v0
+#4
