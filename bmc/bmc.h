@@ -1,11 +1,13 @@
 #pragma once
 
 #include<smt-switch/smt.h>
+#include <unordered_map>
 #include"trans/ts.h"
 #include"trans/unroller.h"
 
 typedef enum
 {
+	INIT_STATE = -2,
   UNKNOWN = -1,
   FALSE = 0,
   TRUE = 1,
@@ -39,7 +41,7 @@ class Property
 class Bmc{
     public:
   Bmc(const Property & p, const TransitionSystem & ts,
-      const smt::SmtSolver & solver,bool inv = false);
+      const smt::SmtSolver & solver,int thread_nums_ = 1,bool inv = false);
 
   ~Bmc();
   ProverResult check_until(int k);
@@ -47,20 +49,22 @@ class Bmc{
   void initialize();
   std::vector<smt::UnorderedTermMap> witness_;
   const std::vector<smt::UnorderedTermMap> witness(){return witness_;}
-
  protected:
+  bool step_0();
   bool step(int i);
   bool compute_witness();
+  void task(int idx,int k);
   smt::SmtSolver solver_;
 
   TransitionSystem ts_;
 
   Unroller unroller_;
 
-  int reached_k_;  ///< the last bound reached with no counterexamples
-
+  int reached_k_;  ///< the last bound reached with no counterexamples  
   smt::Term bad_;
   bool initialized_;
   bool inv_;
-
+	int cur_max_t;
+	int thread_nums;
+	ProverResult result;
 };

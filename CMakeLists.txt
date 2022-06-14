@@ -7,9 +7,10 @@ project(bmc VERSION 0.1.0)
 
 include(CTest)
 enable_testing()
+SET(CMAKE_BUILD_TYPE "Debug")
 
 set(FRONTENDS_DIR "${CMAKE_SOURCE_DIR}/frontends")
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
 include_directories(${PROJECT_SOURCE_DIR}
@@ -26,7 +27,7 @@ add_executable(bmc main.cpp
                     bmc/bmc.cpp)
 
 target_link_libraries(bmc  libsmt-switch.so libbtor2parser.so
-                      libsmt-switch-btor.so
+                      libsmt-switch-btor.so libpthread.so
                 -lgmp -lgmpxx) 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

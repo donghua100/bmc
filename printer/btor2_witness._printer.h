@@ -99,6 +99,7 @@ void print_btor_vals_at_time(const smt::TermVec & vec,
     //              as_bits(valmap.at(vec[i])->to_string()),
     //              vec[i],
     //              time);
+	cout<<valmap.at(vec[i])->to_string()<<endl;
       cout<<i<<" "<<as_bits(valmap.at(vec[i])->to_string())<<" "<<vec[i]<<"@"<<time<<endl;
     } else if (sk == smt::ARRAY) {
       smt::Term tmp = valmap.at(vec[i]);
@@ -206,7 +207,6 @@ void print_witness_btor(const BTOR2Encoder & btor_enc,
   const std::map<uint64_t, smt::Term> no_next_states =
       btor_enc.no_next_statevars();
   bool has_states_without_next = no_next_states.size();
-
   // logger.log(0, "#0");
   cout<<"#0"<<endl;
   print_btor_vals_at_time(states, cex.at(0), 0, ts);

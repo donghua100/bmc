@@ -10,7 +10,9 @@
 #include<string>
 #include<cstring>
 #include<dirent.h>
-
+#include <ctime>
+#include <ratio>
+#include <chrono>
 using namespace std;
 using namespace smt;
 
@@ -19,7 +21,7 @@ using namespace smt;
 
 
 
-void test_one_file(string file,int k,bool inv = false)
+void test_one_file(string file,int k,int thread_nums = 1,bool inv = false)
 {
     cout<<"file name: "<<file<<endl;
     SmtSolver s = smt::BoolectorSolverFactory::create(false);
@@ -34,7 +36,7 @@ void test_one_file(string file,int k,bool inv = false)
         assert(propvec.size()>0);
         Property p(s,propvec[0]);
         cout << "start bmc.."<<endl;
-        Bmc bmc(p,ts,s,inv);
+        Bmc bmc(p,ts,s,thread_nums,inv);
         ProverResult r = bmc.check_until(k);
         if (r == ProverResult::FALSE)
         {
@@ -42,13 +44,14 @@ void test_one_file(string file,int k,bool inv = false)
             cout << "b" <<0<< endl;
             // cout<<"find counter-example!!!"<<endl;
             vector<smt::UnorderedTermMap> cex = bmc.witness();
+			// cout<<"witness: "<<endl;
             print_witness_btor(be, cex, ts);
 			VCDWitnessPrinter vcdprinter(ts,cex);
 			vcdprinter.dump_trace_to_file("dump.vcd");
         }
         else if (r == ProverResult::UNKNOWN)
         {
-            cout << "the circuit in safe in "<<k<<"steps"<<endl;
+            cout << "the circuit in safe in "<<k<<" steps"<<endl;
         }
         else if (r == ProverResult::ERROR)
         {
@@ -70,18 +73,25 @@ int main(int argc,char *argv[])
 {
 
 
-    if (argc != 4)
+    if (argc != 5)
     {
-        printf("usesage:bmc ksteps filename inv(0 or 1)\n");
+        printf("usesage:bmc ksteps filename thread_nums inv(0 or 1)\n");
         exit(-1);
     }
     
     int k = stoi(argv[1]);
     string file = argv[2];
-    string inv = argv[3];
+	int thread_nums = stoi(argv[3]);
+    string inv = argv[4];
     bool flag = false;
     if(inv == "1") flag = true;
-    test_one_file(file,k,flag);
+	using namespace std::chrono;
+	steady_clock::time_point t1 = steady_clock::now();
+    test_one_file(file,k,thread_nums,flag);
+	steady_clock::time_point t2 = steady_clock::now();
+	duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+	std::cout << "It took " << time_span.count() << " seconds.";
+	std::cout << std::endl;
 }
 
 
