@@ -53,7 +53,7 @@ class Bmc{
   bool step_0();
   bool step(int i);
   bool compute_witness();
-  void task(int idx,int k);
+  ProverResult task(int idx,int k);
   smt::SmtSolver solver_;
 
   TransitionSystem ts_;
