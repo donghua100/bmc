@@ -7,7 +7,6 @@
 
 typedef enum
 {
-	INIT_STATE = -2,
   UNKNOWN = -1,
   FALSE = 0,
   TRUE = 1,
@@ -41,7 +40,7 @@ class Property
 class Bmc{
     public:
   Bmc(const Property & p, const TransitionSystem & ts,
-      const smt::SmtSolver & solver,int thread_nums_ = 1,bool inv = false);
+      const smt::SmtSolver & solver,bool inv = false);
 
   ~Bmc();
   ProverResult check_until(int k);
@@ -65,6 +64,4 @@ class Bmc{
   bool initialized_;
   bool inv_;
 	int cur_max_t;
-	int thread_nums;
-	ProverResult result;
 };

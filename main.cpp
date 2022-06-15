@@ -21,7 +21,7 @@ using namespace smt;
 
 
 
-void test_one_file(string file,int k,int thread_nums = 1,bool inv = false)
+void test_one_file(string file,int k,bool inv = false)
 {
     cout<<"file name: "<<file<<endl;
     SmtSolver s = smt::BoolectorSolverFactory::create(false);
@@ -36,7 +36,7 @@ void test_one_file(string file,int k,int thread_nums = 1,bool inv = false)
         assert(propvec.size()>0);
         Property p(s,propvec[0]);
         cout << "start bmc.."<<endl;
-        Bmc bmc(p,ts,s,thread_nums,inv);
+        Bmc bmc(p,ts,s,inv);
         ProverResult r = bmc.check_until(k);
         if (r == ProverResult::FALSE)
         {
@@ -73,7 +73,7 @@ int main(int argc,char *argv[])
 {
 
 
-    if (argc != 5)
+    if (argc != 4)
     {
         printf("usesage:bmc ksteps filename thread_nums inv(0 or 1)\n");
         exit(-1);
@@ -81,13 +81,12 @@ int main(int argc,char *argv[])
     
     int k = stoi(argv[1]);
     string file = argv[2];
-	int thread_nums = stoi(argv[3]);
-    string inv = argv[4];
+    string inv = argv[3];
     bool flag = false;
     if(inv == "1") flag = true;
 	using namespace std::chrono;
 	steady_clock::time_point t1 = steady_clock::now();
-    test_one_file(file,k,thread_nums,flag);
+    test_one_file(file,k,flag);
 	steady_clock::time_point t2 = steady_clock::now();
 	duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
 	std::cout << "It took " << time_span.count() << " seconds.";
