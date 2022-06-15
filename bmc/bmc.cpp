@@ -78,6 +78,7 @@ ProverResult Bmc::task(int idx,int k){
 	buf *shmaddr = (buf *)get_shm();
 	for(int i = idx; i <= k; i+=thread_nums){
 		if(!step(i)) {
+			compute_witness();
 			printf("pid = %u,find counterexample at bound %d\n",getpid(),i);
 			//shmaddr->pid = getpid();
 			//shmaddr->solver_ = solver_;
