@@ -1,7 +1,7 @@
 #include<smt-switch/smt.h>
 #include<smt-switch/boolector_factory.h>
 #include <smt-switch/z3_factory.h>
-#include <smt-switch/cvc5_factory.h>>
+#include <smt-switch/cvc5_factory.h>
 #include"frontends/btor2_encoder.h"
 #include"trans/ts.h"
 #include"trans/unroller.h"
