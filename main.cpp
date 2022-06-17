@@ -1,11 +1,14 @@
 #include<smt-switch/smt.h>
 #include<smt-switch/boolector_factory.h>
+#include <smt-switch/z3_factory.h>
+#include <smt-switch/cvc5_factory.h>>
 #include"frontends/btor2_encoder.h"
 #include"trans/ts.h"
 #include"trans/unroller.h"
 #include"bmc/bmc.h"
 #include"printer/btor2_witness._printer.h"
 #include "printer/vcd_printer.h"
+#include "clipp.h"
 #include<vector>
 #include<string>
 #include<cstring>
@@ -15,7 +18,7 @@
 #include <chrono>
 using namespace std;
 using namespace smt;
-
+using namespace clipp;
 
 // -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
@@ -71,22 +74,22 @@ void test_one_file(string file,int k,bool inv = false)
 
 int main(int argc,char *argv[])
 {
+	int k = 10;
+	string file = "";
+	bool inv = false;
+	auto cli = (
+		value("input file",file),
+		option("-k").set(k).doc("bmc run k steps"),
+		option("-inv").set(inv).doc("inverse bmc")
+	);
 
-
-    if (argc != 4)
-    {
-        printf("usesage:bmc ksteps filename thread_nums inv(0 or 1)\n");
-        exit(-1);
-    }
-    
-    int k = stoi(argv[1]);
-    string file = argv[2];
-    string inv = argv[3];
-    bool flag = false;
-    if(inv == "1") flag = true;
+    if(!parse(argc, argv, cli)){
+		cout << make_man_page(cli, argv[0]);
+		exit(-1);
+	} 
 	using namespace std::chrono;
 	steady_clock::time_point t1 = steady_clock::now();
-    test_one_file(file,k,flag);
+    test_one_file(file,k,inv);
 	steady_clock::time_point t2 = steady_clock::now();
 	duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
 	std::cout << "It took " << time_span.count() << " seconds.";

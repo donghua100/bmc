@@ -15,6 +15,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(${PROJECT_SOURCE_DIR}
                     ${PROJECT_SOURCE_DIR}/deps
+					${PROJECT_SOURCE_DIR}/utils
                     )
 
 link_directories(${PROJECT_SOURCE_DIR}/deps/btor2parser)
