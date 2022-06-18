@@ -29,6 +29,7 @@ add_executable(bmc main.cpp
 
 target_link_libraries(bmc  libsmt-switch.so libbtor2parser.so
                       libsmt-switch-btor.so libpthread.so
+					  libsmt-switch-cvc5.so libsmt-switch-z3.so
                 -lgmp -lgmpxx) 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

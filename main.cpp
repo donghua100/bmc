@@ -1,3 +1,4 @@
+#include <cstddef>
 #include<smt-switch/smt.h>
 #include<smt-switch/boolector_factory.h>
 #include <smt-switch/z3_factory.h>
@@ -24,10 +25,17 @@ using namespace clipp;
 
 
 
-void test_one_file(string file,int k,bool inv = false)
+void test_one_file(string file,int k,bool inv = false,int Stype = 0,bool vcd = false)
 {
-    cout<<"file name: "<<file<<endl;
-    SmtSolver s = smt::BoolectorSolverFactory::create(false);
+    //cout<<"file name: "<<file<<endl;
+	SmtSolver s = NULL;
+	if (Stype == 0) s = smt::BoolectorSolverFactory::create(false);
+	else if (Stype == 1) s = smt::Z3SolverFactory::create(false);
+	else if (Stype == 2) s = smt::Cvc5SolverFactory::create(false);
+	else{
+		cout<<"do not support solver!"<<endl;
+		exit(-1);
+	} 
     s->set_opt("incremental", "true");    
     s->set_opt("produce-models", "true");  // get value
     s->set_opt("produce-unsat-assumptions","true"); 
@@ -50,7 +58,7 @@ void test_one_file(string file,int k,bool inv = false)
 			// cout<<"witness: "<<endl;
             print_witness_btor(be, cex, ts);
 			VCDWitnessPrinter vcdprinter(ts,cex);
-			vcdprinter.dump_trace_to_file("dump.vcd");
+			if (vcd) vcdprinter.dump_trace_to_file("dump.vcd");
         }
         else if (r == ProverResult::UNKNOWN)
         {
@@ -77,134 +85,26 @@ int main(int argc,char *argv[])
 	int k = 10;
 	string file = "";
 	bool inv = false;
+	bool vcd = false;
+	int Stype = 0;
 	auto cli = (
 		value("input file",file),
-		option("-k").set(k).doc("bmc run k steps"),
-		option("-inv").set(inv).doc("inverse bmc")
+		option("-k").doc("bmc run k steps") & value("step",k),
+		option("-inv").set(inv).doc("inverse bmc"),
+		option("-s","--solver").set(Stype) & opt_value("Stype=0",Stype) % "0:btor,1:z3,2:cvc5(default: 0)",
+		option("-vcd").set(vcd).doc("generagte vcd files if find conterexample")
 	);
 
     if(!parse(argc, argv, cli)){
 		cout << make_man_page(cli, argv[0]);
 		exit(-1);
 	} 
-	using namespace std::chrono;
-	steady_clock::time_point t1 = steady_clock::now();
-    test_one_file(file,k,inv);
-	steady_clock::time_point t2 = steady_clock::now();
-	duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
-	std::cout << "It took " << time_span.count() << " seconds.";
-	std::cout << std::endl;
+    test_one_file(file,k,inv,Stype,vcd);
+	//using namespace std::chrono;
+	//steady_clock::time_point t1 = steady_clock::now();
+	//steady_clock::time_point t2 = steady_clock::now();
+	//duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+	//std::cout << "It took " << time_span.count() << " seconds.";
+	//std::cout << std::endl;
 }
 
-
-
-
-
-
-void getFileNames(string path,vector<string> &filesvec)
-{
-    DIR *dr;
-    struct dirent *en;
-    dr = opendir(path.c_str());
-    if (!dr) cout<<"opean file "<<path<<"error!"<<endl;
-    while((en = readdir(dr))!=NULL)
-    {
-        if (strcmp(en->d_name,".")==0 || strcmp(en->d_name,"..") == 0) continue;
-        else if (en->d_type == 8) 
-        {
-            // cout <<en->d_name<<endl;
-            filesvec.push_back(path + "/" + en->d_name);
-        }
-        else if (en->d_type == 4) 
-        {
-            string subpath = path + "/" + en->d_name;
-            getFileNames(subpath,filesvec);
-        }
-    }
-    closedir(dr);
-}
-
-
-void test_all_file(string filepath)
-{
-    vector<string> filevec;
-    getFileNames(filepath,filevec);
-    cout<<"tot files : "<<filevec.size()<<endl;
-    for (const auto & file:filevec) 
-    {
-        test_one_file(file,100,false);
-        cout<<"-------------------------"<<endl;
-    }
-}
-
-// int main(int argc,char *argv[])
-// {
-//     // string filepath = "../tests/encoder/input/btor2/array";
-//     // vector<string> filevec;
-//     // getFileNames(filepath,filevec);
-//     // cout<<"tot files: "<<filevec.size()<<endl;
-//     SmtSolver s = smt::Cvc5SolverFactory::create(false);
-//     s->set_opt("incremental", "true");    
-//     s->set_opt("produce-models", "true");  // get value
-//     s->set_opt("produce-unsat-assumptions","true");  // get unsat core
-
-//     // string testfile = "../tests/encoder/input/btor2/array/2019/mann/unsafe/ridecore_array_unsafe.btor";
-//     // string testfile = "../tests/encoder/input/mybtor2/p-counter-false.btor2"; //  inv 2 步
-//     // string testfile = "../tests/encoder/input/mybtor2/memory.btor2";
-//     // string testfile = "../tests/encoder/input/btor2/bv/2019/beem/anderson.3.prop1-back-serstep.btor2";
-    // string filepath = "../tests/encoder/input/btor2/array";
-    // string file = "../tests/encoder/input/btor2/array/2019/wolf/2019B/marlann_compute_fail2-p1.btor"; // 12 vs 90+
-    // string file1 = "../tests/encoder/input/btor2/bv/2020/mann/rast-p19.btor";  // 0 vs 0
-    // string file2 = "../tests/encoder/input/btor2/bv/2019/beem/anderson.3.prop1-back-serstep.btor2";// 3 vs 112+
-    // string file3 = "../tests/encoder/input/mybtor2/memory.btor2"; // 3 vs 100+
-    // string file4 = "../tests/encoder/input/mybtor2/p-counter-false.btor2"; // 2 vs 1
-    // string file5 = "../tests/encoder/input/btor2/array/2019/wolf/2019C/dblclockfft_butterfly_ck1-p006.btor";//UNSAT 10+ vs30+
-    // string file6 = "../tests/encoder/input/btor2/array/2019/mann/unsafe/ridecore_array_unsafe.btor";
-    // string file7 = "../tests/encoder/input/mybtor2/p-counter-false-10.btor2"; // 90 vs 2
-//     int k = 0;
-//     string testfile;
-//     if(argc != 3) 
-//     {
-//         printf("usage: bmc ksteps filename\n");
-//         return 0;
-//     }
-//     k = stoi(argv[1]);
-//     testfile = argv[2];
-//     try
-//     {
-//         TransitionSystem ts(s);
-//         BTOR2Encoder be(testfile, ts);
-//         TermVec propvec = be.propvec();
-//         assert(propvec.size()>0);
-//         Property p(s,propvec[0]);
-//         cout << "start bmc.."<<endl;
-//         Bmc bmc(p,ts,s);
-//         // bmc.set_inv();
-//         ProverResult r = bmc.check_until(k);
-//         if (r == ProverResult::FALSE)
-//         {
-//             cout << "sat" << endl;
-//             cout << "b" <<0<< endl;
-//             // cout<<"find counter-example!!!"<<endl;
-//             vector<smt::UnorderedTermMap> cex = bmc.witness();
-//             print_witness_btor(be, cex, ts);
-//         }
-//         else if (r == ProverResult::UNKNOWN)
-//         {
-//             cout << "the circuit in safe in "<<k<<"steps"<<endl;
-//         }
-//         else if (r == ProverResult::ERROR)
-//         {
-//             cout <<"something error in checking!"<<endl; 
-//         }
-//         else if (r == ProverResult::TRUE)
-//         {
-//             cout <<"the circuit is verified!"<<endl;
-//         }
-//     }
-//     catch(const std::exception& e)
-//     {
-//         std::cerr << e.what() << '\n';
-//     }
-//     return 0;
-// }
