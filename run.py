@@ -21,17 +21,10 @@ def BMCAFile(file_name: str,Stype: int,outpath: str):
         file.write(time.strftime("%a %b %d %H:%M:%S %Y", time.localtime()))
         file.write('\n')
         file.write("Checking file: " + file_name + '\n')
-        proc = sp.Popen(['./build/bmc', file_name,'-k', '100', '-s', str(Stype)], 
-                        stdout=sp.PIPE, stderr=sp.STDOUT,encoding='utf-8')
-        try:
-            outs,_ = proc.communicate(timeout=3600)
-        except sp.TimeoutExpired:
-            proc.kill()
-            outs,_ = proc.communicate()
-            outs += 'TIMEOUT\n'
-        file.write(outs)
-        file.write(time.strftime("%a %b %d %H:%M:%S %Y", time.localtime()))
-        file.write('\n')
+        cost = timeit.timeit(
+                           lambda:sp.run(['./build/bmc', file_name,'-k', '100', '-s', str(Stype)], 
+                        stdout=file,stderr=sp.STDOUT,timeout=1),number=1)
+        file.write('Time cost: ' + str(cost) + '\n')
         file.close()
 
 

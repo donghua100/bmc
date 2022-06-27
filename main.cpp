@@ -62,15 +62,15 @@ void test_one_file(string file,int k,bool inv = false,int Stype = 0,bool vcd = f
         }
         else if (r == ProverResult::UNKNOWN)
         {
-            cout << "the circuit in safe in "<<k<<" steps"<<endl;
+			cout<<"unknow"<<endl;
         }
         else if (r == ProverResult::ERROR)
         {
-            cout <<"something error in checking!"<<endl; 
+            cout <<"error"<<endl; 
         }
         else if (r == ProverResult::TRUE)
         {
-            cout <<"the circuit is verified!"<<endl;
+            cout <<"verified"<<endl;
         }
     }
     catch(const std::exception& e)
