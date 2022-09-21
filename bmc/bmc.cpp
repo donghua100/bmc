@@ -2,9 +2,9 @@
 #include "trans/ts.h"
 #include"utils/exceptions.h"
 #include <cstdio>
-#include <smt-switch/ops.h>
-#include <smt-switch/result.h>
-#include <smt-switch/smt_defs.h>
+#include "smt-switch/include/ops.h"
+#include "smt-switch/include/result.h"
+#include "smt-switch/include/smt_defs.h"
 #include <cstring>
 using namespace smt;
 using namespace std;

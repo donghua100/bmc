@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <algorithm>
 
-#include <smt-switch/utils.h>
+#include "smt-switch/include/utils.h"
 
 #include "unroller.h"
 #include"utils/exceptions.h"

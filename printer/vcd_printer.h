@@ -7,7 +7,7 @@
 #include <functional>
 
 #include "gmpxx.h"
-#include "smt-switch/smt.h"
+#include "smt-switch/include/smt.h"
 #include "utils/exceptions.h"
 
 

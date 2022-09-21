@@ -1,6 +1,6 @@
 #pragma once
 
-#include<smt-switch/smt.h>
+#include "smt-switch/include/smt.h"
 #include <unordered_map>
 #include"trans/ts.h"
 #include"trans/unroller.h"

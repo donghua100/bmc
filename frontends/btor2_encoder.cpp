@@ -14,7 +14,7 @@
  **
  **/
 
-#include "smt-switch/utils.h"
+#include "smt-switch/include/utils.h"
 
 #include "btor2_encoder.h"
 

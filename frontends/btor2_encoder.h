@@ -31,7 +31,7 @@ extern "C" {
 #include "trans/ts.h"
 #include "utils/exceptions.h"
 
-#include "smt-switch/smt.h"
+#include "smt-switch/include/smt.h"
 
 class BTOR2Encoder
 {

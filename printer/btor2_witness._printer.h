@@ -7,7 +7,7 @@
 #include "gmpxx.h"
 #include "utils/exceptions.h"
 
-#include "smt-switch/smt.h"
+#include "smt-switch/include/smt.h"
 #include "trans/ts.h"
 
 using namespace std;

@@ -1,8 +1,8 @@
 #include <cstddef>
-#include<smt-switch/smt.h>
-#include<smt-switch/boolector_factory.h>
-#include <smt-switch/z3_factory.h>
-#include <smt-switch/cvc5_factory.h>
+#include "smt-switch/include/smt.h"
+#include "smt-switch/include/boolector_factory.h"
+#include "smt-switch/include/z3_factory.h"
+#include "smt-switch/include/cvc5_factory.h"
 #include"frontends/btor2_encoder.h"
 #include"trans/ts.h"
 #include"trans/unroller.h"

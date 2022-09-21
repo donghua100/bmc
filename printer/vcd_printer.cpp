@@ -1,5 +1,5 @@
 #include "frontends/btor2_encoder.h"
-#include "smt-switch/boolector_factory.h"
+#include "smt-switch/include/boolector_factory.h"
 
 #include "vcd_printer.h"
 
