@@ -1,24 +1,28 @@
 #include"bmc.h"
+#include "utils/logger.h"
 #include "trans/ts.h"
 #include"utils/exceptions.h"
-#include <cstdio>
 #include "smt-switch/include/ops.h"
 #include "smt-switch/include/result.h"
 #include "smt-switch/include/smt_defs.h"
+#include <bits/chrono.h>
 #include <cstring>
+#include <cstdio>
+#include <chrono>
 using namespace smt;
 using namespace std;
 
 
 Bmc::Bmc(const Property & p, const TransitionSystem & ts,
-		const SmtSolver & solver,bool inv)
+		const SmtSolver & solver,bool inv, int skip)
 	:solver_(solver),
 	ts_(ts),
 	unroller_(ts_),
 	bad_(solver_->make_term(smt::PrimOp::Not,
 				p.prop())),
 	initialized_ (false),
-	inv_(inv)
+	inv_(inv),
+	skip_(skip)
 {
 }
 
@@ -42,7 +46,7 @@ ProverResult Bmc::check_until(int k)
 		return ProverResult::FALSE;
 	}
 	reached_k_++;
-	for (int i =1; i <= k; i++) {
+	for (int i =1; i <= k; i+=skip_) {
 		if (!step(i)){
 			compute_witness();
 			return ProverResult::FALSE;
@@ -94,10 +98,15 @@ bool Bmc::step(int i)
 	cur_max_t = i;
 	solver_->assert_formula(unroller_.at_time(ts_.trans(), i - 1));
 	solver_->push();
-	std::cout<<"Checking bmc at bound: "<<i<<std::endl;
+	logger.log(1, "Checking steps at {}",i);
+	// std::cout<<"Checking bmc at bound: "<<i<<std::endl;
+	chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
 	if (inv_) solver_->assert_formula(unroller_.at_time(ts_.init(),i));
 	else
 		solver_->assert_formula(unroller_.at_time(bad_, i));
+	chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
+	chrono::duration<double> time_span = chrono::duration_cast<chrono::duration<double>>(t2-t1);
+	logger.log(1, "Checking step {} takes time: {} sec", i , round(time_span.count()));
 	Result r = solver_->check_sat();
 	if (r.is_sat()) {
 		res = false;

@@ -20,15 +20,18 @@ include_directories(${PROJECT_SOURCE_DIR}
                     )
 
 link_directories(${PROJECT_SOURCE_DIR}/deps/btor2tools/build/lib
-				 ${PROJECT_SOURCE_DIR}/deps/smt-switch/build/lib
+				 ${PROJECT_SOURCE_DIR}/deps/smt-switch/build
 				 ${PROJECT_SOURCE_DIR}/deps/smt-switch/build/btor
 				 ${PROJECT_SOURCE_DIR}/deps/smt-switch/build/cvc5
 				 ${PROJECT_SOURCE_DIR}/deps/smt-switch/build/z3
+				 ${PROJECT_SOURCE_DIR}/deps/smt-switch/build/msat
+				 ${PROJECT_SOURCE_DIR}/deps/smt-switch/build/yices2
 				 )
 
 
 add_executable(bmc main.cpp
                     frontends/btor2_encoder.cpp
+					utils/logger.cpp
                     trans/ts.cpp
                     trans/unroller.cpp
 					printer/vcd_printer.cpp
@@ -36,6 +39,8 @@ add_executable(bmc main.cpp
 
 target_link_libraries(bmc   libsmt-switch-btor.a 
 							libsmt-switch-cvc5.a libsmt-switch-z3.a
+							libsmt-switch-msat.a
+							libsmt-switch-yices2.a
 							libsmt-switch.a
 							libbtor2parser.a
 							libpthread.so

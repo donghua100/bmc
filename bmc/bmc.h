@@ -40,7 +40,7 @@ class Property
 class Bmc{
 	public:
 		Bmc(const Property & p, const TransitionSystem & ts,
-				const smt::SmtSolver & solver,bool inv = false);
+				const smt::SmtSolver & solver,bool inv = false, int skip = 1);
 
 		~Bmc();
 		ProverResult check_until(int k);
@@ -63,5 +63,6 @@ class Bmc{
 		smt::Term bad_;
 		bool initialized_;
 		bool inv_;
+		int skip_;
 		int cur_max_t;
 };

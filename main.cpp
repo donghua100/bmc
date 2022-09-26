@@ -1,19 +1,23 @@
-#include <cstddef>
 #include "smt-switch/include/smt.h"
 #include "smt-switch/include/boolector_factory.h"
+#include "smt-switch/include/solver_enums.h"
 #include "smt-switch/include/z3_factory.h"
 #include "smt-switch/include/cvc5_factory.h"
-#include"frontends/btor2_encoder.h"
-#include"trans/ts.h"
-#include"trans/unroller.h"
-#include"bmc/bmc.h"
-#include"printer/btor2_witness._printer.h"
+#include "smt-switch/include/msat_factory.h"
+#include "smt-switch/include/yices2_factory.h"
+#include "frontends/btor2_encoder.h"
+#include "trans/ts.h"
+#include "trans/unroller.h"
+#include "bmc/bmc.h"
+#include "printer/btor2_witness_printer.h"
 #include "printer/vcd_printer.h"
+#include "utils/logger.h"
 #include "clipp.h"
-#include<vector>
-#include<string>
-#include<cstring>
-#include<dirent.h>
+#include <cstddef>
+#include <vector>
+#include <string>
+#include <cstring>
+#include <dirent.h>
 #include <ctime>
 #include <ratio>
 #include <chrono>
@@ -25,15 +29,17 @@ using namespace clipp;
 
 
 
-void test_one_file(string file,int k,bool inv = false,int Stype = 0,bool vcd = false)
+void test_one_file(string file,int k,int skip, bool inv,string slv,string vcdpath)
 {
     //cout<<"file name: "<<file<<endl;
 	SmtSolver s = NULL;
-	if (Stype == 0) s = smt::BoolectorSolverFactory::create(false);
-	else if (Stype == 1) s = smt::Z3SolverFactory::create(false);
-	else if (Stype == 2) s = smt::Cvc5SolverFactory::create(false);
+	if (slv == "btor") s = smt::BoolectorSolverFactory::create(false);
+	else if (slv == "z3") s = smt::Z3SolverFactory::create(false);
+	else if (slv == "cvc5") s = smt::Cvc5SolverFactory::create(false);
+	else if (slv == "msat") s = smt::MsatSolverFactory::create(false);
+	else if (slv == "yices") s = smt::Yices2SolverFactory::create(false);
 	else{
-		cout<<"do not support solver!"<<endl;
+		cout<<"not support solver!"<<endl;
 		exit(-1);
 	} 
     s->set_opt("incremental", "true");    
@@ -47,18 +53,17 @@ void test_one_file(string file,int k,bool inv = false,int Stype = 0,bool vcd = f
         assert(propvec.size()>0);
         Property p(s,propvec[0]);
         cout << "start bmc.."<<endl;
-        Bmc bmc(p,ts,s,inv);
+        Bmc bmc(p,ts,s,inv,skip);
         ProverResult r = bmc.check_until(k);
         if (r == ProverResult::FALSE)
         {
+            cout<<"find counter-example"<<endl;
             cout << "sat" << endl;
             cout << "b" <<0<< endl;
-            // cout<<"find counter-example!!!"<<endl;
             vector<smt::UnorderedTermMap> cex = bmc.witness();
-			// cout<<"witness: "<<endl;
             print_witness_btor(be, cex, ts);
 			VCDWitnessPrinter vcdprinter(ts,cex);
-			if (vcd) vcdprinter.dump_trace_to_file("dump.vcd");
+			vcdprinter.dump_trace_to_file(vcdpath);
         }
         else if (r == ProverResult::UNKNOWN)
         {
@@ -82,29 +87,28 @@ void test_one_file(string file,int k,bool inv = false,int Stype = 0,bool vcd = f
 
 int main(int argc,char *argv[])
 {
-	int k = 10;
+	int k = 10000;
+	int skip = 1;
 	string file = "";
 	bool inv = false;
-	bool vcd = false;
-	int Stype = 0;
+	string vcdpath = "dump.vcd";
+	string slv = "btor";
+	int v = 0;
 	auto cli = (
-		value("input file",file),
 		option("-k").doc("bmc run k steps") & value("step",k),
-		option("-inv").set(inv).doc("inverse bmc"),
-		option("-s","--solver").set(Stype) & opt_value("Stype=0",Stype) % "0:btor,1:z3,2:cvc5(default: 0)",
-		option("-vcd").set(vcd).doc("generagte vcd files if find conterexample")
+		option("--skip").doc("skip steps") & value("skip",skip),
+		option("--inv").set(inv).doc("inverse bmc"),
+		option("-s","--solver") & value("solver",slv) % "btor(by default), z3, cvc5, msat, yices",
+		option("--vcd") & value("vcdpath",vcdpath) % ("vcd file output path if find conterexample"),
+		option("-v", "--verbose") & value("verbose", v) % ("verbose level(default 0)"),
+		value("input file",file)
 	);
 
     if(!parse(argc, argv, cli)){
 		cout << make_man_page(cli, argv[0]);
 		exit(-1);
-	} 
-    test_one_file(file,k,inv,Stype,vcd);
-	//using namespace std::chrono;
-	//steady_clock::time_point t1 = steady_clock::now();
-	//steady_clock::time_point t2 = steady_clock::now();
-	//duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
-	//std::cout << "It took " << time_span.count() << " seconds.";
-	//std::cout << std::endl;
+	}
+	logger.set_verbosity(v);
+    test_one_file(file, k, skip, inv, slv, vcdpath);
 }
 
