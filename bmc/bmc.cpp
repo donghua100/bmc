@@ -14,7 +14,7 @@ using namespace std;
 
 
 Bmc::Bmc(const Property & p, const TransitionSystem & ts,
-		const SmtSolver & solver,bool inv, int skip)
+		const SmtSolver & solver,bool inv, int start_k, int skip)
 	:solver_(solver),
 	ts_(ts),
 	unroller_(ts_),
@@ -22,6 +22,7 @@ Bmc::Bmc(const Property & p, const TransitionSystem & ts,
 				p.prop())),
 	initialized_ (false),
 	inv_(inv),
+	start_k_(start_k),
 	skip_(skip)
 {
 }
@@ -46,7 +47,7 @@ ProverResult Bmc::check_until(int k)
 		return ProverResult::FALSE;
 	}
 	reached_k_++;
-	for (int i =1; i <= k; i+=skip_) {
+	for (int i =start_k_; i <= k; i+=skip_) {
 		if (!step(i)){
 			compute_witness();
 			return ProverResult::FALSE;

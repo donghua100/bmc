@@ -29,7 +29,7 @@ using namespace clipp;
 
 
 
-void test_one_file(string file,int k,int skip, bool inv,string slv,string vcdpath)
+void test_one_file(string file,int k, int start_k, int skip, bool inv,string slv,string vcdpath)
 {
     //cout<<"file name: "<<file<<endl;
 	SmtSolver s = NULL;
@@ -53,7 +53,7 @@ void test_one_file(string file,int k,int skip, bool inv,string slv,string vcdpat
         assert(propvec.size()>0);
         Property p(s,propvec[0]);
         cout << "start bmc.."<<endl;
-        Bmc bmc(p,ts,s,inv,skip);
+        Bmc bmc(p, ts, s, inv, start_k, skip);
         ProverResult r = bmc.check_until(k);
         if (r == ProverResult::FALSE)
         {
@@ -89,6 +89,7 @@ int main(int argc,char *argv[])
 {
 	int k = 10000;
 	int skip = 1;
+	int start_k = 1;
 	string file = "";
 	bool inv = false;
 	string vcdpath = "dump.vcd";
@@ -96,6 +97,7 @@ int main(int argc,char *argv[])
 	int v = 0;
 	auto cli = (
 		option("-k").doc("bmc run k steps") & value("step",k),
+		option("--start").doc("bmc starts at kth step") & value("start",start_k),
 		option("--skip").doc("skip steps") & value("skip",skip),
 		option("--inv").set(inv).doc("inverse bmc"),
 		option("-s","--solver") & value("solver",slv) % "btor(by default), z3, cvc5, msat, yices",
@@ -109,6 +111,6 @@ int main(int argc,char *argv[])
 		exit(-1);
 	}
 	logger.set_verbosity(v);
-    test_one_file(file, k, skip, inv, slv, vcdpath);
+    test_one_file(file, k, start_k, skip, inv, slv, vcdpath);
 }
 

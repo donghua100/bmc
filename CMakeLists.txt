@@ -12,6 +12,24 @@ SET(CMAKE_BUILD_TYPE "Debug")
 set(FRONTENDS_DIR "${CMAKE_SOURCE_DIR}/frontends")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# option(BUILD_STATIC "build static binary" OFF)
+if(BUILD_STATIC)
+  set(CMAKE_EXE_LINKER_FLAGS -static)
+  set(CMAKE_FIND_LIBRARY_SUFFIXES .a)
+  set(CMAKE_EXE_LINK_DYNAMIC_C_FLAGS)       # remove -Wl,-Bdynamic
+  set(CMAKE_EXE_LINK_DYNAMIC_CXX_FLAGS)
+  set(CMAKE_SHARED_LIBRARY_C_FLAGS)         # remove -fPIC
+  set(CMAKE_SHARED_LIBRARY_CXX_FLAGS)
+  set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
+  set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
+  # Maybe this works as well, haven't tried yet.
+  # set_property(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS FALSE)
+else(BUILD_STATIC)
+  # Set RPATH to use for installed targets; append linker search path
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${LOFAR_LIBDIR}")
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+endif(BUILD_STATIC)
+
 
 include_directories(${PROJECT_SOURCE_DIR}
                     ${PROJECT_SOURCE_DIR}/deps
@@ -43,8 +61,9 @@ target_link_libraries(bmc   libsmt-switch-btor.a
 							libsmt-switch-yices2.a
 							libsmt-switch.a
 							libbtor2parser.a
-							libpthread.so
-							-lgmp -lgmpxx) 
+							-lpthread
+							-lgmpxx
+							-lgmp) 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
