@@ -4,4 +4,4 @@ flatten
 memory -nomap
 hierarchy -check
 setundef -undriven -init -expose
-write_btor  -s ../tests/encoder/input/mybtor2/mycounter-true.btor2
+write_btor  -s ../test/counter-true.btor

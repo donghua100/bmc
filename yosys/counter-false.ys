@@ -4,4 +4,4 @@ flatten
 memory -nomap
 hierarchy -check
 setundef -undriven -init -expose
-write_btor  -s ../build/mycounter-false.btor2
+write_btor  -s ../test/counter-false.btor
