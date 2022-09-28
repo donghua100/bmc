@@ -105,10 +105,10 @@ bool Bmc::step(int i)
 	if (inv_) solver_->assert_formula(unroller_.at_time(ts_.init(),i));
 	else
 		solver_->assert_formula(unroller_.at_time(bad_, i));
+	Result r = solver_->check_sat();
 	chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
 	chrono::duration<double> time_span = chrono::duration_cast<chrono::duration<double>>(t2-t1);
-	logger.log(1, "Checking step {} takes time: {} sec", i , round(time_span.count()));
-	Result r = solver_->check_sat();
+	logger.log(2, "Checking step {} takes time: {} sec", i , round(time_span.count()));
 	if (r.is_sat()) {
 		res = false;
 	} else {
